@@ -132,18 +132,18 @@ function App() {
       {list === "student" &&
       <>
         <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">スコア
-          <button className="btn btn-primary me-md-2" type="button" onClick={()=>{
+          <button className="btn btn-outline-primary me-md-2" type="button" onClick={()=>{
             setSortKey("score")
             setSortOrder("asc")}}>昇順</button>
-          <button className="btn btn-primary" type="button" onClick={()=>{
+          <button className="btn btn-outline-primary" type="button" onClick={()=>{
             setSortKey("score")
             setSortOrder("desc")}}>降順</button>
         </div>
         <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">勉強時間
-          <button className="btn btn-primary me-md-2" type="button" onClick={()=>{
+          <button className="btn btn-outline-primary me-md-2" type="button" onClick={()=>{
             setSortKey("score")
             setSortOrder("asc")}}>昇順</button>
-          <button className="btn btn-primary" type="button" onClick={()=>{
+          <button className="btn btn-outline-primary" type="button" onClick={()=>{
             setSortKey("score")
             setSortOrder("desc")}}>降順</button>
         </div>
@@ -151,10 +151,10 @@ function App() {
       }
       {list === "mentor" &&
         <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">実務経験月数
-          <button className="btn btn-primary me-md-2" type="button" onClick={()=>{
+          <button className="btn btn-outline-primary me-md-2" type="button" onClick={()=>{
             setSortKey("experienceDays")
             setSortOrder("asc")}}>昇順</button>
-          <button className="btn btn-primary" type="button" onClick={()=>{
+          <button className="btn btn-outline-primary" type="button" onClick={()=>{
             setSortKey("experienceDays")
             setSortOrder("desc")}}>降順</button>
         </div>
