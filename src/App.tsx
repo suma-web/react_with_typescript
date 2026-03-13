@@ -56,6 +56,8 @@ function App() {
   ]
 
   const [list, setList] = useState("all")
+  const [sortKey, setSortKey] = useState<string | null>(null)
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
 
   const keys = [
     ...new Set(
@@ -64,6 +66,21 @@ function App() {
       .filter(key => key != "id")
     )
   ]
+  
+  const sortedUsers = [...USER_LIST]
+  .filter(user => user.role !== "all")
+  .sort((a, b) => {
+    if (!sortKey) return 0
+
+    const A = a[sortKey as keyof T] ?? 0
+    const B = b[sortKey as keyof T] ?? 0
+
+    if (sortOrder === "asc") {
+      return Number(A) - Number(B)
+    } else {
+      return Number(B) - Number(A)
+    }
+  })
 
   return (
     <>
@@ -80,6 +97,38 @@ function App() {
           </li>
         </ul>
       </div>
+
+      {list === "student" &&
+      <>
+        <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">スコア
+          <button className="btn btn-primary me-md-2" type="button" onClick={()=>{
+            setSortKey("score")
+            setSortOrder("asc")}}>昇順</button>
+          <button className="btn btn-primary" type="button" onClick={()=>{
+            setSortKey("score")
+            setSortOrder("desc")}}>降順</button>
+        </div>
+        <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">勉強時間
+          <button className="btn btn-primary me-md-2" type="button" onClick={()=>{
+            setSortKey("score")
+            setSortOrder("asc")}}>昇順</button>
+          <button className="btn btn-primary" type="button" onClick={()=>{
+            setSortKey("score")
+            setSortOrder("desc")}}>降順</button>
+        </div>
+      </> 
+      }
+      {list === "mentor" &&
+        <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">実務経験月数
+          <button className="btn btn-primary me-md-2" type="button" onClick={()=>{
+            setSortKey("experienceDays")
+            setSortOrder("asc")}}>昇順</button>
+          <button className="btn btn-primary" type="button" onClick={()=>{
+            setSortKey("experienceDays")
+            setSortOrder("desc")}}>降順</button>
+        </div>
+      }
+
       <table className='m-2 table'>
         <thead className='text-break table-light'>
           <tr>
@@ -89,7 +138,7 @@ function App() {
           </tr>
         </thead>
         <tbody className='text-break'>
-          {USER_LIST
+          {sortedUsers
           .filter(user => list === "all" || user.role === list)
           .map(user => (
               <tr key={user.id}>
