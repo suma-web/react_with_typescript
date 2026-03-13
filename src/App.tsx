@@ -55,9 +55,12 @@ function App() {
     { id: 8, name: "鈴木八郎", role: "mentor", email: "test8@happiness.com", age: 33, postCode: "100-0009", phone: "0120000008", hobbies: ["ランニング", "旅行"], url: "https://hhh.com", experienceDays: 6000, useLangs: ["Golang", "Rails"], availableStartCode: 301, availableEndCode: 505 },
   ]
 
-  const [list, setList] = useState("all")
-  const [sortKey, setSortKey] = useState<string | null>(null)
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
+  const [list, setList] = useState("all");
+  const [isActive, setIsActive] = useState(false);
+  const [sortKey, setSortKey] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [addUser, setAddUser] = useState<any>({});
+  const [userList, setUserList] = useState<T[]>(USER_LIST);
 
   const keys = [
     ...new Set(
@@ -82,18 +85,46 @@ function App() {
     }
   })
 
+  const handleChange = (key: string, value: string) => {
+    setAddUser({
+      ...addUser,
+      [key]: value
+    })
+  }
+
+  const handleAddUser = () => {
+    setUserList([...userList, { id: Date.now(), ...addUser }])
+    setAddUser({})
+  }
+
   return (
     <>
-      <div className='container mt-3'>
+      <button className="btn btn-light m-2" onClick={()=>setIsActive(!isActive)}>新しく追加する</button>
+      {isActive && 
+      <div className='container mt-3 d-flex flex-column'>
+        {keys.map(key => (
+            <>
+              <label>{key}</label>
+              <input
+                type="text"
+                value={addUser[key] || ""}
+                onChange={(e) => handleChange(key, e.target.value)}
+              />
+            </>
+          ))}
+        <button className="btn btn-light mt-4" onClick={handleAddUser}>追加</button>
+      </div>}
+
+      <div className='container mt-3 mb-4'>
         <ul className="nav nav-pills nav-fill">
           <li className="nav-item">
-            <a href='#' className={`nav-link ${list === "all" && "active"}`} onClick={() => setList("all")}>All-list</a>
+            <a className={`nav-link ${list === "all" && "active"}`} onClick={() => setList("all")}>All-list</a>
           </li>
           <li className="nav-item">
-            <a href='#' className={`nav-link ${list === "mentor" && "active"}`} onClick={() => setList("mentor")}>Mentor-only</a>
+            <a className={`nav-link ${list === "mentor" && "active"}`} onClick={() => setList("mentor")}>Mentor-only</a>
           </li>
           <li className="nav-item">
-            <a href='#' className={`nav-link ${list === "student" && "active"}`} onClick={() => setList("student")}>Student-only</a>
+            <a className={`nav-link ${list === "student" && "active"}`} onClick={() => setList("student")}>Student-only</a>
           </li>
         </ul>
       </div>
