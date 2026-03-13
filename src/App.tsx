@@ -57,6 +57,14 @@ function App() {
 
   const [list, setList] = useState("all")
 
+  const keys = [
+    ...new Set(
+      USER_LIST
+      .flatMap(user => Object.keys(user))
+      .filter(key => key != "id")
+    )
+  ]
+
   return (
     <>
       {/* タブ　タブごとにクリックしたら結果が変わる */}
@@ -72,11 +80,39 @@ function App() {
             <a href='#' className={`nav-link ${list === "stundet"  && "active"}`} onClick={() => setList("student")}>生徒のみ</a>
           </li>
         </ul>
-        {USER_LIST
-        .filter(user => list === "all" || user.role === list)
-        .map(user => (
-            <p key={user.id}>{user.name}</p>
-          ))}
+        <table className='m-2'>
+          <thead className='text-break'>
+            <tr>
+            {keys.map(th => (
+              <th>{th}</th>
+            ))}
+            </tr>
+          </thead>
+          <tbody className='text-break'>
+            {USER_LIST
+            .filter(user => list === "all" || user.role === list)
+            .map(user => (
+                <tr key={user.id}>
+                  <td>{user.name}</td>
+                  <td>{user.role}</td>
+                  <td>{user.email}</td>
+                  <td>{user.age}</td>
+                  <td>{user.postCode}</td>
+                  <td>{user.phone}</td>
+                  <td>{user.hobbies}</td>
+                  <td>{user.url}</td>
+                  <td>{user.studyMinutes}</td>
+                  <td>{user.taskCode}</td>
+                  <td>{user.studyLangs}</td>
+                  <td>{user.score}</td>
+                  <td>{user.experienceDays}</td>
+                  <td>{user.useLangs}</td>
+                  <td>{user.availableStartCode}</td>
+                  <td>{user.availableEndCode}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
       </div>
     </>
   )
