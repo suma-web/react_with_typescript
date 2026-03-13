@@ -67,53 +67,52 @@ function App() {
 
   return (
     <>
-      {/* タブ　タブごとにクリックしたら結果が変わる */}
       <div className='container mt-3'>
         <ul className="nav nav-pills nav-fill">
           <li className="nav-item">
-            <a href='#' className={`nav-link ${list === "all"  && "active"}`} onClick={() => setList("all")}>全一覧</a>
+            <a href='#' className={`nav-link ${list === "all" && "active"}`} onClick={() => setList("all")}>All-list</a>
           </li>
           <li className="nav-item">
-            <a href='#' className={`nav-link ${list === "mentor"  && "active"}`} onClick={() => setList("mentor")}>メンターのみ</a>
+            <a href='#' className={`nav-link ${list === "mentor" && "active"}`} onClick={() => setList("mentor")}>Mentor-only</a>
           </li>
           <li className="nav-item">
-            <a href='#' className={`nav-link ${list === "stundet"  && "active"}`} onClick={() => setList("student")}>生徒のみ</a>
+            <a href='#' className={`nav-link ${list === "student" && "active"}`} onClick={() => setList("student")}>Student-only</a>
           </li>
         </ul>
-        <table className='m-2'>
-          <thead className='text-break'>
-            <tr>
-            {keys.map(th => (
-              <th>{th}</th>
-            ))}
-            </tr>
-          </thead>
-          <tbody className='text-break'>
-            {USER_LIST
-            .filter(user => list === "all" || user.role === list)
-            .map(user => (
-                <tr key={user.id}>
-                  <td>{user.name}</td>
-                  <td>{user.role}</td>
-                  <td>{user.email}</td>
-                  <td>{user.age}</td>
-                  <td>{user.postCode}</td>
-                  <td>{user.phone}</td>
-                  <td>{user.hobbies}</td>
-                  <td>{user.url}</td>
-                  <td>{user.studyMinutes}</td>
-                  <td>{user.taskCode}</td>
-                  <td>{user.studyLangs}</td>
-                  <td>{user.score}</td>
-                  <td>{user.experienceDays}</td>
-                  <td>{user.useLangs}</td>
-                  <td>{user.availableStartCode}</td>
-                  <td>{user.availableEndCode}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
       </div>
+      <table className='m-2 table'>
+        <thead className='text-break table-light'>
+          <tr>
+          {keys.map(tHeader => (
+              <th>{tHeader}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className='text-break'>
+          {USER_LIST
+          .filter(user => list === "all" || user.role === list)
+          .map(user => (
+              <tr key={user.id}>
+                <td>{user.name}</td>
+                <td>{user.role}</td>
+                <td>{user.email}</td>
+                <td>{user.age}</td>
+                <td>{user.postCode}</td>
+                <td>{user.phone}</td>
+                <td>{user.hobbies}</td>
+                <td>{user.url}</td>
+                <td>{user.studyMinutes}</td>
+                <td>{user.taskCode}</td>
+                <td>{user.studyLangs}</td>
+                <td>{user.score}</td>
+                <td>{user.experienceDays}</td>
+                <td>{user.useLangs}</td>
+                <td>{user.availableStartCode}</td>
+                <td>{user.availableEndCode}</td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
     </>
   )
 }
