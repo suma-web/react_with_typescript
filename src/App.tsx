@@ -232,18 +232,18 @@ function App() {
       <>
         <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">score
           <button className="btn btn-outline-primary me-md-2" type="button" onClick={()=>{
-            setSortKey("score")
+            setSortKey("score" as NumericKey)
             setSortOrder("asc")}}>Asc</button>
           <button className="btn btn-outline-primary" type="button" onClick={()=>{
-            setSortKey("score")
+            setSortKey("score" as NumericKey)
             setSortOrder("desc")}}>Desc</button>
         </div>
         <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">studyMinutes
           <button className="btn btn-outline-primary me-md-2" type="button" onClick={()=>{
-            setSortKey("score")
+            setSortKey("studyMinutes" as NumericKey)
             setSortOrder("asc")}}>Asc</button>
           <button className="btn btn-outline-primary" type="button" onClick={()=>{
-            setSortKey("score")
+            setSortKey("studyMinutes" as NumericKey)
             setSortOrder("desc")}}>Desc</button>
         </div>
       </> 
@@ -251,10 +251,10 @@ function App() {
       {list === "mentor" &&
         <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">experienceDays
           <button className="btn btn-outline-primary me-md-2" type="button" onClick={()=>{
-            setSortKey("experienceDays")
+            setSortKey("experienceDays" as NumericKey)
             setSortOrder("asc")}}>Asc</button>
           <button className="btn btn-outline-primary" type="button" onClick={()=>{
-            setSortKey("experienceDays")
+            setSortKey("experienceDays" as NumericKey)
             setSortOrder("desc")}}>Desc</button>
         </div>
       }
