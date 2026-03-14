@@ -46,31 +46,33 @@ function App() {
     { id: 8, name: "鈴木八郎", role: "mentor", email: "test8@happiness.com", age: 33, postCode: "100-0009", phone: "0120000008", hobbies: ["ランニング", "旅行"], url: "https://hhh.com", experienceDays: 6000, useLangs: ["Golang", "Rails"], availableStartCode: 301, availableEndCode: 505 },
   ]
 
-  const [list, setList] = useState("all");
-  const [isActive, setIsActive] = useState(false);
-  const [sortKey, setSortKey] = useState<string | null>(null);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [addUser, setAddUser] = useState<any>({});
-  const [userList, setUserList] = useState<T[]>(USER_LIST);
+  const [list,setList] = useState<"all"|Role>("all")
+  const [isActive,setIsActive] = useState(false)
 
-  const commonKeys = [
+  const [sortKey,setSortKey] = useState<keyof User | null>(null)
+  const [sortOrder,setSortOrder] = useState<"asc"|"desc">("asc")
+
+  const [addUser,setAddUser] = useState<AddUser>({})
+  const [userList,setUserList] = useState<User[]>(USER_LIST)
+
+  const commonKeys:(keyof BaseUser)[] = [
     "name",
     "email",
     "age",
     "postCode",
     "phone",
     "hobbies",
-    "url",
-]
+    "url"
+  ]
 
-  const studentKeys = [
+  const studentKeys:(keyof Student)[] = [
     "studyMinutes",
     "taskCode",
     "studyLangs",
     "score"
   ]
 
-  const mentorKeys = [
+  const mentorKeys:(keyof Mentor)[] = [
     "experienceDays",
     "useLangs",
     "availableStartCode",
