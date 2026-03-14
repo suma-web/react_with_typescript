@@ -62,6 +62,30 @@ function App() {
   const [addUser, setAddUser] = useState<any>({});
   const [userList, setUserList] = useState<T[]>(USER_LIST);
 
+  const commonKeys = [
+    "name",
+    "email",
+    "age",
+    "postCode",
+    "phone",
+    "hobbies",
+    "url",
+]
+
+  const studentKeys = [
+    "studyMinutes",
+    "taskCode",
+    "studyLangs",
+    "score"
+  ]
+
+  const mentorKeys = [
+    "experienceDays",
+    "useLangs",
+    "availableStartCode",
+    "availableEndCode"
+  ]
+
   const keys = [
     ...new Set(
       USER_LIST
@@ -70,19 +94,19 @@ function App() {
     )
   ]
   
-  const sortedUsers = [...USER_LIST]
-  .filter(user => user.role !== "all")
-  .sort((a, b) => {
-    if (!sortKey) return 0
+  const sortedUsers = [...userList]
+    .filter(user => user.role !== "all")
+    .sort((a, b) => {
+      if (!sortKey) return 0
 
-    const A = a[sortKey as keyof T] ?? 0
-    const B = b[sortKey as keyof T] ?? 0
+      const A = a[sortKey as keyof T] ?? 0
+      const B = b[sortKey as keyof T] ?? 0
 
-    if (sortOrder === "asc") {
-      return Number(A) - Number(B)
-    } else {
-      return Number(B) - Number(A)
-    }
+      if (sortOrder === "asc") {
+        return Number(A) - Number(B)
+      } else {
+        return Number(B) - Number(A)
+      }
   })
 
   const handleChange = (key: string, value: string) => {
@@ -95,24 +119,72 @@ function App() {
   const handleAddUser = () => {
     setUserList([...userList, { id: Date.now(), ...addUser }])
     setAddUser({})
+    setIsActive(false)
+  }
+
+  const isDisabled = (key: string) => {
+    if (!addUser.role) return false
+
+    if (addUser.role === "student") {
+      return mentorKeys.includes(key)
+    }
+
+    if (addUser.role === "mentor") {
+      return studentKeys.includes(key)
+    }
+  }
+
+  const isFormComplete = () => {
+    if (!addUser.role) return false
+
+    let requiredKeys = [...commonKeys]
+
+    if (addUser.role === "student") {
+      requiredKeys = [...requiredKeys, ...studentKeys]
+    }
+
+    if (addUser.role === "mentor") {
+      requiredKeys = [...requiredKeys, ...mentorKeys]
+    }
+
+    return requiredKeys.every(key => addUser[key])
   }
 
   return (
     <>
-      <button className="btn btn-light m-2" onClick={()=>setIsActive(!isActive)}>新しく追加する</button>
+      <button className="btn btn-light m-3" onClick={()=>setIsActive(!isActive)}>新しく追加する</button>
       {isActive && 
-      <div className='container mt-3 d-flex flex-column'>
+      <div className='container w-25 mt-3 mb-5 d-flex flex-column'>
         {keys.map(key => (
             <>
-              <label>{key}</label>
+              <label key={key}>{key}</label>
+              {key==="role" ? 
+              <select
+                value={addUser.role || ""}
+                onChange={(e) => handleChange("role", e.target.value)}
+              >
+                <option value="">--- 選択してください ---</option>
+                <option value="student">student</option>
+                <option value="mentor">mentor</option>
+              </select> :
               <input
                 type="text"
                 value={addUser[key] || ""}
+                disabled={isDisabled(key)}
+                required={!isDisabled(key)}
                 onChange={(e) => handleChange(key, e.target.value)}
               />
+              }
             </>
           ))}
-        <button className="btn btn-light mt-4" onClick={handleAddUser}>追加</button>
+        {isFormComplete() && (
+          <button
+            className="btn btn-light mt-4"
+            onClick={handleAddUser}
+          >
+            Add
+          </button>
+        )}
       </div>}
 
       <div className='container mt-3 mb-4'>
@@ -131,32 +203,32 @@ function App() {
 
       {list === "student" &&
       <>
-        <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">スコア
+        <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">score
           <button className="btn btn-outline-primary me-md-2" type="button" onClick={()=>{
             setSortKey("score")
-            setSortOrder("asc")}}>昇順</button>
+            setSortOrder("asc")}}>Asc</button>
           <button className="btn btn-outline-primary" type="button" onClick={()=>{
             setSortKey("score")
-            setSortOrder("desc")}}>降順</button>
+            setSortOrder("desc")}}>Desc</button>
         </div>
-        <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">勉強時間
+        <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">studyMinutes
           <button className="btn btn-outline-primary me-md-2" type="button" onClick={()=>{
             setSortKey("score")
-            setSortOrder("asc")}}>昇順</button>
+            setSortOrder("asc")}}>Asc</button>
           <button className="btn btn-outline-primary" type="button" onClick={()=>{
             setSortKey("score")
-            setSortOrder("desc")}}>降順</button>
+            setSortOrder("desc")}}>Desc</button>
         </div>
       </> 
       }
       {list === "mentor" &&
-        <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">実務経験月数
+        <div className="m-2 d-grid gap-2 d-md-flex justify-content-md-end">experienceDays
           <button className="btn btn-outline-primary me-md-2" type="button" onClick={()=>{
             setSortKey("experienceDays")
-            setSortOrder("asc")}}>昇順</button>
+            setSortOrder("asc")}}>Asc</button>
           <button className="btn btn-outline-primary" type="button" onClick={()=>{
             setSortKey("experienceDays")
-            setSortOrder("desc")}}>降順</button>
+            setSortOrder("desc")}}>Desc</button>
         </div>
       }
 
