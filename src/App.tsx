@@ -2,48 +2,39 @@ import { useState } from 'react';
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-function App() {
-  type Student = {
-    id: number;
-    name: string;
-    role: string;
-    email: string;
-    age: number;
-    postCode: string;
-    phone: string;
-    hobbies: string[];
-    url: string;
-    studyMinutes: number;
-    taskCode: number;
-    studyLangs: string[];
-    score: number;
-    experienceDays?: undefined;
-    useLangs?: undefined;
-    availableStartCode?: undefined;
-    availableEndCode?: undefined;
-  } 
-  type Mentor = {
-    id: number;
-    name: string;
-    role: string;
-    email: string;
-    age: number;
-    postCode: string;
-    phone: string;
-    hobbies: string[];
-    url: string;
-    experienceDays: number;
-    useLangs: string[];
-    availableStartCode: number;
-    availableEndCode: number;
-    studyMinutes?: undefined;
-    taskCode?: undefined;
-    studyLangs?: undefined;
-    score?: undefined;
+  type Role = "student" | "mentor";
+
+  type BaseUser = {
+    id: number
+    name: string
+    role: Role
+    email: string
+    age: number
+    postCode: string
+    phone: string
+    hobbies: string[]
+    url: string
+  }
+
+  type Student = BaseUser & {
+    role: "student"
+    studyMinutes: number
+    taskCode: number
+    studyLangs: string[]
+    score: number
+  }
+
+  type Mentor = BaseUser & {
+    role: "mentor"
+    experienceDays: number
+    useLangs: string[]
+    availableStartCode: number
+    availableEndCode: number
   }
 
   type T = Student | Mentor
 
+function App() {
   const USER_LIST: T[] = [
     { id: 1, name: "鈴木太郎", role: "student", email: "test1@happiness.com", age: 26, postCode: "100-0003", phone: "0120000001", hobbies: ["旅行", "食べ歩き", "サーフィン"], url: "https://aaa.com", studyMinutes: 3000, taskCode: 101, studyLangs: ["Rails", "Javascript"], score: 68 },
     { id: 2, name: "鈴木二郎", role: "mentor", email: "test2@happiness.com", age: 31, postCode: "100-0005", phone: "0120000002", hobbies: ["サッカー", "ランニング", "筋トレ"], url: "https://bbb.com", experienceDays: 1850, useLangs: ["Next.js", "GoLang"], availableStartCode: 201, availableEndCode: 302 },
