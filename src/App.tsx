@@ -125,7 +125,7 @@ function App() {
     return sortOrder === "asc" ? A - B : B - A
   })
 
-  const handleChange = <K extends keyof AddUser>(key:K,value:AddUser[K])=>{
+  const handleChange = (key: UserInputKey, value: unknown)=>{
     setAddUser(prev=>({
     ...prev,
     [key]:value
@@ -196,7 +196,7 @@ function App() {
               </select> :
               <input
                 type="text"
-                value={addUser[key] || ""}
+                value={String((addUser as Record<UserInputKey, unknown>)[key] ?? "")}
                 disabled={isDisabled(key)}
                 required={!isDisabled(key)}
                 onChange={(e) => handleChange(key, e.target.value)}
