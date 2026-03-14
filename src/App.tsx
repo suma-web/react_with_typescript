@@ -158,7 +158,7 @@ function App() {
       <div className='container w-25 mt-3 mb-5 d-flex flex-column'>
         {keys.map(key => (
             <>
-              <label key={key}>{key}</label>
+              <div key={key}>{key}</div>
               {key==="role" ? 
               <select
                 value={addUser.role || ""}
@@ -254,14 +254,15 @@ function App() {
                 <td>{user.phone}</td>
                 <td>{user.hobbies}</td>
                 <td>{user.url}</td>
-                <td>{user.studyMinutes}</td>
-                <td>{user.taskCode}</td>
-                <td>{user.studyLangs}</td>
-                <td>{user.score}</td>
-                <td>{user.experienceDays}</td>
-                <td>{user.useLangs}</td>
-                <td>{user.availableStartCode}</td>
-                <td>{user.availableEndCode}</td>
+                <td>{'studyMinutes' in user ? user.studyMinutes : ""}</td>
+                <td>{'taskCode' in user ? user.taskCode : ""}</td>
+                <td>{'studyLangs' in user ? user.studyLangs.join(",") : ""}</td>
+                <td>{'score' in user ? user.score : ""}</td>
+
+                <td>{'experienceDays' in user ? user.experienceDays : ""}</td>
+                <td>{'useLangs' in user ? user.useLangs.join(",") : ""}</td>
+                <td>{'availableStartCode' in user ? user.availableStartCode : ""}</td>
+                <td>{'availableEndCode' in user ? user.availableEndCode : ""}</td>
               </tr>
             ))}
         </tbody>
