@@ -37,6 +37,7 @@ type AddUser = Partial<Omit<User, "id">>
 
 const commonKeys = [
   "name",
+  "role",
   "email",
   "age",
   "postCode",
@@ -67,8 +68,33 @@ type MentorKey = typeof mentorKeys[number];
 
 type UserInputKey = CommonKey | StudentKey | MentorKey;
 
+const keys: UserInputKey[] = [
+  "name",
+  "role",
+  "email",
+  "age",
+  "postCode",
+  "phone",
+  "hobbies",
+  "url",
+  "studyMinutes",
+  "taskCode",
+  "studyLangs",
+  "score",
+  "experienceDays",
+  "useLangs",
+  "availableStartCode",
+  "availableEndCode"
+]
+
+type NumericKey = {
+  [K in keyof User]
+  : User[K] extends number
+  ? K : never
+}[keyof User]
+
 function App() {
-  const USER_LIST: T[] = [
+  const USER_LIST: User[] = [
     { id: 1, name: "鈴木太郎", role: "student", email: "test1@happiness.com", age: 26, postCode: "100-0003", phone: "0120000001", hobbies: ["旅行", "食べ歩き", "サーフィン"], url: "https://aaa.com", studyMinutes: 3000, taskCode: 101, studyLangs: ["Rails", "Javascript"], score: 68 },
     { id: 2, name: "鈴木二郎", role: "mentor", email: "test2@happiness.com", age: 31, postCode: "100-0005", phone: "0120000002", hobbies: ["サッカー", "ランニング", "筋トレ"], url: "https://bbb.com", experienceDays: 1850, useLangs: ["Next.js", "GoLang"], availableStartCode: 201, availableEndCode: 302 },
     { id: 3, name: "鈴木三郎", role: "student", email: "test3@happiness.com", age: 23, postCode: "300-0332", phone: "0120000003", hobbies: ["アニメ", "ゲーム", "旅行"], url: "https://ccc.com", studyMinutes: 125000, taskCode: 204, studyLangs: ["Rails", "Next.js"], score: 90 },
@@ -82,7 +108,7 @@ function App() {
   const [list,setList] = useState<"all"|Role>("all")
   const [isActive,setIsActive] = useState(false)
 
-  const [sortKey,setSortKey] = useState<keyof User | null>(null)
+  const [sortKey,setSortKey] = useState<NumericKey | null>(null)
   const [sortOrder,setSortOrder] = useState<"asc"|"desc">("asc")
 
   const [addUser,setAddUser] = useState<AddUser>({})
@@ -91,14 +117,12 @@ function App() {
   const sortedUsers = [...userList].sort((a,b)=>{
     if(!sortKey) return 0
 
-    const A = a[sortKey] as number
-    const B = b[sortKey] as number
+    const A = a[sortKey]
+    const B = b[sortKey]
 
     if(typeof A !== "number" || typeof B !== "number") return 0
 
-    return sortOrder === "asc"
-    ? A - B
-    : B - A
+    return sortOrder === "asc" ? A - B : B - A
   })
 
   const handleChange = <K extends keyof AddUser>(key:K,value:AddUser[K])=>{
@@ -121,15 +145,15 @@ function App() {
     setIsActive(false)
   }
 
-  const isDisabled = (key:keyof User)=>{
+  const isDisabled = (key: UserInputKey)=>{
     if(!addUser.role) return false
 
     if(addUser.role === "student"){
-      return mentorKeys.includes(key)
+      return mentorKeys.includes(key as MentorKey)
     }
 
     if(addUser.role === "mentor"){
-      return studentKeys.includes(key)
+      return studentKeys.includes(key as StudentKey)
     }
     return false
   }
@@ -147,7 +171,9 @@ function App() {
       requiredKeys = [...requiredKeys, ...mentorKeys]
     }
 
-    return requiredKeys.every(key=>addUser[key]!==undefined)
+    return requiredKeys.every(key => (
+      addUser as Record<UserInputKey, unknown>
+    )[key] !== undefined)
 
   }
 
@@ -258,7 +284,6 @@ function App() {
                 <td>{'taskCode' in user ? user.taskCode : ""}</td>
                 <td>{'studyLangs' in user ? user.studyLangs.join(",") : ""}</td>
                 <td>{'score' in user ? user.score : ""}</td>
-
                 <td>{'experienceDays' in user ? user.experienceDays : ""}</td>
                 <td>{'useLangs' in user ? user.useLangs.join(",") : ""}</td>
                 <td>{'availableStartCode' in user ? user.availableStartCode : ""}</td>
