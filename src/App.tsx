@@ -83,21 +83,32 @@ function App() {
     "availableEndCode"
   ]
 
-  const keys = [
-    ...new Set(
-      USER_LIST
-      .flatMap(user => Object.keys(user))
-      .filter(key => key != "id")
-    )
+  const keys: UserInputKey[] = [
+    "name",
+    "role",
+    "email",
+    "age",
+    "postCode",
+    "phone",
+    "hobbies",
+    "url",
+    "studyMinutes",
+    "taskCode",
+    "studyLangs",
+    "score",
+    "experienceDays",
+    "useLangs",
+    "availableStartCode",
+    "availableEndCode"
   ]
   
-  const sortedUsers = [...userList]
-    .sort((a,b)=>{
-
+  const sortedUsers = [...userList].sort((a,b)=>{
     if(!sortKey) return 0
 
     const A = a[sortKey] as number
     const B = b[sortKey] as number
+
+    if(typeof A !== "number" || typeof B !== "number") return 0
 
     return sortOrder === "asc"
     ? A - B
