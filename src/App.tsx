@@ -35,8 +35,37 @@ type Mentor = BaseUser & {
 type User = Student | Mentor
 type AddUser = Partial<Omit<User, "id">>
 
-type BaseUserInputKeys = keyof Omit<BaseUser, "id">
-type UserInputKey = keyof Omit<User, "id">
+const commonKeys = [
+  "name",
+  "email",
+  "age",
+  "postCode",
+  "phone",
+  "hobbies",
+  "url"
+] as const;
+
+type CommonKey = typeof commonKeys[number]
+
+const studentKeys = [
+  "studyMinutes",
+  "taskCode",
+  "studyLangs",
+  "score"
+] as const;
+
+type StudentKey = typeof studentKeys[number]
+
+const mentorKeys = [
+  "experienceDays",
+  "useLangs",
+  "availableStartCode",
+  "availableEndCode"
+] as const;
+
+type MentorKey = typeof mentorKeys[number];
+
+type UserInputKey = CommonKey | StudentKey | MentorKey;
 
 function App() {
   const USER_LIST: T[] = [
@@ -53,54 +82,11 @@ function App() {
   const [list,setList] = useState<"all"|Role>("all")
   const [isActive,setIsActive] = useState(false)
 
-  const [sortKey,setSortKey] = useState<keyof T | null>(null)
+  const [sortKey,setSortKey] = useState<keyof User | null>(null)
   const [sortOrder,setSortOrder] = useState<"asc"|"desc">("asc")
 
   const [addUser,setAddUser] = useState<AddUser>({})
-  const [userList,setUserList] = useState<T[]>(USER_LIST)
-
-  const commonKeys: BaseUserInputKeys[] = [
-    "name",
-    "email",
-    "age",
-    "postCode",
-    "phone",
-    "hobbies",
-    "url"
-  ]
-
-  const studentKeys:(keyof Student)[] = [
-    "studyMinutes",
-    "taskCode",
-    "studyLangs",
-    "score"
-  ]
-
-  const mentorKeys:(keyof Mentor)[] = [
-    "experienceDays",
-    "useLangs",
-    "availableStartCode",
-    "availableEndCode"
-  ]
-
-  const keys: UserInputKey[] = [
-    "name",
-    "role",
-    "email",
-    "age",
-    "postCode",
-    "phone",
-    "hobbies",
-    "url",
-    "studyMinutes",
-    "taskCode",
-    "studyLangs",
-    "score",
-    "experienceDays",
-    "useLangs",
-    "availableStartCode",
-    "availableEndCode"
-  ]
+  const [userList,setUserList] = useState<User[]>(USER_LIST)
   
   const sortedUsers = [...userList].sort((a,b)=>{
     if(!sortKey) return 0
@@ -125,8 +111,8 @@ function App() {
   const handleAddUser = () => {
     if(!addUser.role) return
 
-    const newUser:T = {
-      ...(addUser as T),
+    const newUser:User = {
+      ...(addUser as User),
       id:Date.now()
     }
 
@@ -135,15 +121,15 @@ function App() {
     setIsActive(false)
   }
 
-  const isDisabled = (key:keyof T)=>{
+  const isDisabled = (key:keyof User)=>{
     if(!addUser.role) return false
 
     if(addUser.role === "student"){
-      return mentorKeys.includes(key as keyof Mentor)
+      return mentorKeys.includes(key)
     }
 
     if(addUser.role === "mentor"){
-      return studentKeys.includes(key as keyof Student)
+      return studentKeys.includes(key)
     }
     return false
   }
@@ -176,7 +162,7 @@ function App() {
               {key==="role" ? 
               <select
                 value={addUser.role || ""}
-                onChange={(e) => handleChange("role", e.target.value)}
+                onChange={(e) => handleChange("role", e.target.value as Role)}
               >
                 <option value="">--- 選択してください ---</option>
                 <option value="student">student</option>
