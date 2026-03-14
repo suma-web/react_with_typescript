@@ -2,37 +2,41 @@ import { useState } from 'react';
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-  type Role = "student" | "mentor";
+type Role = "student" | "mentor";
 
-  type BaseUser = {
-    id: number
-    name: string
-    role: Role
-    email: string
-    age: number
-    postCode: string
-    phone: string
-    hobbies: string[]
-    url: string
-  }
+type BaseUser = {
+  id: number
+  name: string
+  role: Role
+  email: string
+  age: number
+  postCode: string
+  phone: string
+  hobbies: string[]
+  url: string
+}
 
-  type Student = BaseUser & {
-    role: "student"
-    studyMinutes: number
-    taskCode: number
-    studyLangs: string[]
-    score: number
-  }
+type Student = BaseUser & {
+  role: "student"
+  studyMinutes: number
+  taskCode: number
+  studyLangs: string[]
+  score: number
+}
 
-  type Mentor = BaseUser & {
-    role: "mentor"
-    experienceDays: number
-    useLangs: string[]
-    availableStartCode: number
-    availableEndCode: number
-  }
+type Mentor = BaseUser & {
+  role: "mentor"
+  experienceDays: number
+  useLangs: string[]
+  availableStartCode: number
+  availableEndCode: number
+}
 
-  type T = Student | Mentor
+type User = Student | Mentor
+type AddUser = Partial<Omit<User, "id">>
+
+type BaseUserInputKeys = keyof Omit<BaseUser, "id">
+type UserInputKey = keyof Omit<User, "id">
 
 function App() {
   const USER_LIST: T[] = [
@@ -49,13 +53,13 @@ function App() {
   const [list,setList] = useState<"all"|Role>("all")
   const [isActive,setIsActive] = useState(false)
 
-  const [sortKey,setSortKey] = useState<keyof User | null>(null)
+  const [sortKey,setSortKey] = useState<keyof T | null>(null)
   const [sortOrder,setSortOrder] = useState<"asc"|"desc">("asc")
 
   const [addUser,setAddUser] = useState<AddUser>({})
-  const [userList,setUserList] = useState<User[]>(USER_LIST)
+  const [userList,setUserList] = useState<T[]>(USER_LIST)
 
-  const commonKeys:(keyof BaseUser)[] = [
+  const commonKeys: BaseUserInputKeys[] = [
     "name",
     "email",
     "age",
@@ -88,49 +92,55 @@ function App() {
   ]
   
   const sortedUsers = [...userList]
-    .filter(user => user.role !== "all")
-    .sort((a, b) => {
-      if (!sortKey) return 0
+    .sort((a,b)=>{
 
-      const A = a[sortKey as keyof T] ?? 0
-      const B = b[sortKey as keyof T] ?? 0
+    if(!sortKey) return 0
 
-      if (sortOrder === "asc") {
-        return Number(A) - Number(B)
-      } else {
-        return Number(B) - Number(A)
-      }
+    const A = a[sortKey] as number
+    const B = b[sortKey] as number
+
+    return sortOrder === "asc"
+    ? A - B
+    : B - A
   })
 
-  const handleChange = (key: string, value: string) => {
-    setAddUser({
-      ...addUser,
-      [key]: value
-    })
+  const handleChange = <K extends keyof AddUser>(key:K,value:AddUser[K])=>{
+    setAddUser(prev=>({
+    ...prev,
+    [key]:value
+    }))
   }
 
   const handleAddUser = () => {
-    setUserList([...userList, { id: Date.now(), ...addUser }])
+    if(!addUser.role) return
+
+    const newUser:T = {
+      ...(addUser as T),
+      id:Date.now()
+    }
+
+    setUserList(prev=>[...prev,newUser])
     setAddUser({})
     setIsActive(false)
   }
 
-  const isDisabled = (key: string) => {
-    if (!addUser.role) return false
+  const isDisabled = (key:keyof T)=>{
+    if(!addUser.role) return false
 
-    if (addUser.role === "student") {
-      return mentorKeys.includes(key)
+    if(addUser.role === "student"){
+      return mentorKeys.includes(key as keyof Mentor)
     }
 
-    if (addUser.role === "mentor") {
-      return studentKeys.includes(key)
+    if(addUser.role === "mentor"){
+      return studentKeys.includes(key as keyof Student)
     }
+    return false
   }
 
-  const isFormComplete = () => {
-    if (!addUser.role) return false
+  const isFormComplete = ()=>{
+    if(!addUser.role) return false
 
-    let requiredKeys = [...commonKeys]
+    let requiredKeys: UserInputKey[] = [...commonKeys]
 
     if (addUser.role === "student") {
       requiredKeys = [...requiredKeys, ...studentKeys]
@@ -140,7 +150,8 @@ function App() {
       requiredKeys = [...requiredKeys, ...mentorKeys]
     }
 
-    return requiredKeys.every(key => addUser[key])
+    return requiredKeys.every(key=>addUser[key]!==undefined)
+
   }
 
   return (
