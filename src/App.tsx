@@ -114,13 +114,15 @@ function App() {
   const [addUser,setAddUser] = useState<AddUser>({})
   const [userList,setUserList] = useState<User[]>(USER_LIST)
   
-  const sortedUsers = [...userList].sort((a,b)=>{
-    if(!sortKey) return 0
+  const sortedUsers = [...userList]
+  .filter((user) => list === "all" || user.role === list)
+  .sort((a, b) => {
+    if (!sortKey) return 0
 
     const A = a[sortKey]
     const B = b[sortKey]
 
-    if(typeof A !== "number" || typeof B !== "number") return 0
+    if (typeof A !== "number" || typeof B !== "number") return 0
 
     return sortOrder === "asc" ? A - B : B - A
   })
@@ -139,7 +141,6 @@ function App() {
       ...(addUser as User),
       id:Date.now()
     }
-
     setUserList(prev=>[...prev,newUser])
     setAddUser({})
     setIsActive(false)
@@ -181,10 +182,10 @@ function App() {
     <>
       <button className="btn btn-light m-3" onClick={()=>setIsActive(!isActive)}>新しく追加する</button>
       {isActive && 
-      <div className='container w-25 mt-3 mb-5 d-flex flex-column'>
+      <div className='container mt-3 mb-5 d-flex flex-column'>
         {keys.map(key => (
-            <>
-              <div key={key}>{key}</div>
+            <div key={key} className='container w-50 mt-3 d-flex flex-column'>
+              <label>{key}</label>
               {key==="role" ? 
               <select
                 value={addUser.role || ""}
@@ -202,11 +203,11 @@ function App() {
                 onChange={(e) => handleChange(key, e.target.value)}
               />
               }
-            </>
+            </div>
           ))}
         {isFormComplete() && (
           <button
-            className="btn btn-light mt-4"
+            className="btn btn-light mt-4 mx-auto w-25"
             onClick={handleAddUser}
           >
             Add
