@@ -1,6 +1,6 @@
-type Role = "student" | "mentor"
+export type Role = "student" | "mentor"
 
-type BaseUser = {
+export type BaseUser = {
   id: number
   name: string
   role: Role
@@ -12,7 +12,7 @@ type BaseUser = {
   url: string
 }
 
-type Student = BaseUser & {
+export type Student = BaseUser & {
   role: "student"
   studyMinutes: number
   taskCode: number
@@ -20,7 +20,7 @@ type Student = BaseUser & {
   score: number
 }
 
-type Mentor = BaseUser & {
+export type Mentor = BaseUser & {
   role: "mentor"
   experienceDays: number
   useLangs: string[]
