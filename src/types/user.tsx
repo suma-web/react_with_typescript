@@ -1,6 +1,6 @@
 export type Role = "student" | "mentor"
 
-type BaseUser = {
+export type BaseUser = {
   id: number
   name: string
   role: Role
@@ -14,18 +14,18 @@ type BaseUser = {
 
 export type Student = BaseUser & {
   role: "student"
-  studyMinutes: number
-  taskCode: number
-  studyLangs: string[]
-  score: number
+  studyMinutes: number | ''
+  taskCode: number | ''
+  studyLangs: string[] | ''
+  score: number | ''
 }
 
 export type Mentor = BaseUser & {
   role: "mentor"
-  experienceDays: number
-  useLangs: string[]
-  availableStartCode: number
-  availableEndCode: number
+  experienceDays: number | ''
+  useLangs: string[] | ''
+  availableStartCode: number | ''
+  availableEndCode: number | ''
 }
 
 export type User = Student | Mentor
