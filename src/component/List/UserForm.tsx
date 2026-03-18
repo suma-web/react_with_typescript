@@ -1,26 +1,24 @@
 import { useState } from 'react';
-import { userList } from '../../data/userLists';
-import type { User } from '../../types/user';
+import { userList } from '../../data/userList';
+import type { Mentor, Student, User,  } from '../../types/user';
 import { mentorRequired, studentRequired } from '../../types/requiredDisableKeys';
 
 type Props = {
-  setUserList: React.Dispatch<React.SetStateAction<User[]>>;
+  setUserListItem: React.Dispatch<React.SetStateAction<User[]>>;
 };
 
-export const UserForm = ({ setUserList }: Props) => {
+export const UserForm = ({ setUserListItem }: Props) => {
   const [addUser, setAddUser] = useState<Partial<User>>({});
 
-  const isDisabled = (key: string) => {
+  const isDisabled = (key: keyof User) => {
     const role = addUser.role;
 
     if (!role) return true;
 
     if (role === 'student') {
-      return !studentRequired.includes(key);
-    }
-
-    if (role === 'mentor') {
-      return !mentorRequired.includes(key);
+      return !studentRequired.includes(key as keyof Mentor);
+    } else if (role === 'mentor') {
+      return !mentorRequired.includes(key as keyof Student);
     }
 
     return true;
@@ -43,7 +41,7 @@ export const UserForm = ({ setUserList }: Props) => {
       id: Date.now(),
     } as User;
 
-    setUserList((prev) => [...prev, newUser]);
+    setUserListItem((prev) => [...prev, newUser]);
 
     setAddUser({});
   };
@@ -67,8 +65,8 @@ export const UserForm = ({ setUserList }: Props) => {
             <input
               type="text"
               value={addUser[key as keyof User] ?? ''}
-              disabled={isDisabled(key)}
-              required={!isDisabled(key)}
+              disabled={isDisabled(key as keyof User)}
+              required={!isDisabled(key as keyof User)}
               onChange={(e) => handleChange(key as keyof User, e.target.value)}
             />
           )}

@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import type { User, UserRole } from '../../types/user';
 import type { SortKey } from '../../data/user';
+import { SortButtons } from '../SortButtons/SortButtons';
 
 type Props = {
   userList: User[];
 };
 
-export const UserForm = ({ userList }: Props) => {
+export const UserList = ({ userList }: Props) => {
   const [activeTab, setActiveTab] = useState<'all' | UserRole>('all');
   const [sortConfig, setSortConfig] = useState<{
     key: SortKey | null;
@@ -69,62 +70,12 @@ export const UserForm = ({ userList }: Props) => {
 
       {activeTab === 'student' && (
         <>
-          <div className="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-            <label>studyMinutes</label>
-            <button
-              className="btn btn-primary me-md-2"
-              type="button"
-              onClick={() => handleSort('studyMinutes', 'asc')}
-            >
-              Asc
-            </button>
-            <button
-              className="btn btn-secondary"
-              type="button"
-              onClick={() => handleSort('studyMinutes', 'desc')}
-            >
-              Desc
-            </button>
-          </div>
-          <div className="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-            <label>score</label>
-            <button
-              className="btn btn-primary me-md-2"
-              type="button"
-              onClick={() => handleSort('score', 'asc')}
-            >
-              Asc
-            </button>
-            <button
-              className="btn btn-secondary"
-              type="button"
-              onClick={() => handleSort('score', 'desc')}
-            >
-              Desc
-            </button>
-          </div>
+          <SortButtons kind="studyMinutes" handleSort={handleSort} />
+          <SortButtons kind="score" handleSort={handleSort} />
         </>
       )}
 
-      {activeTab === 'mentor' && (
-        <div className="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-          <label>experienceDays</label>
-          <button
-            className="btn btn-primary me-md-2"
-            type="button"
-            onClick={() => handleSort('experienceDays', 'asc')}
-          >
-            Asc
-          </button>
-          <button
-            className="btn btn-secondary"
-            type="button"
-            onClick={() => handleSort('experienceDays', 'desc')}
-          >
-            Desc
-          </button>
-        </div>
-      )}
+      {activeTab === 'mentor' && <SortButtons kind="experienceDays" handleSort={handleSort} />}
 
       {sortedUsers.map((item) => (
         <ul key={item.id} className="list-group p-4">
@@ -136,14 +87,22 @@ export const UserForm = ({ userList }: Props) => {
           <li className="list-group-item">{item.phone}</li>
           <li className="list-group-item">{item.hobbies}</li>
           <li className="list-group-item">{item.url}</li>
-          <li className="list-group-item">{item.studyMinutes ?? ''}</li>
-          <li className="list-group-item">{item.studyLangs ?? ''}</li>
-          <li className="list-group-item">{item.taskCode ?? ''}</li>
-          <li className="list-group-item">{item.score ?? ''}</li>
-          <li className="list-group-item">{item.experienceDays ?? ''}</li>
-          <li className="list-group-item">{item.useLangs ?? ''}</li>
-          <li className="list-group-item">{item.availableStartCode ?? ''}</li>
-          <li className="list-group-item">{item.availableEndCode ?? ''}</li>
+          {/* <li className="list-group-item">{('studyMinutes' in item && item.studyMinutes) || ''}</li>
+          <li className="list-group-item">{('studyLangs' in item && item.studyLangs) || ''}</li>
+          <li className="list-group-item">{('taskCode' in item && item.taskCode) || ''}</li>
+          <li className="list-group-item">{('score' in item && item.score) || ''}</li>
+          <li className="list-group-item">{('experienceDays' in item && item.experienceDays) || ''}</li>
+          <li className="list-group-item">{('useLangs' in item && item.useLangs) || ''}</li>
+          <li className="list-group-item">{('availableStartCode' in item && item.availableStartCode) || ''}</li>
+          <li className="list-group-item">{('availableEndCode' in item && item.availableEndCode) || ''}</li> */}
+          <li className="list-group-item">{item.studyMinutes ?? ""}</li>
+          <li className="list-group-item">{item.studyLangs ?? ""}</li>
+          <li className="list-group-item">{item.taskCode ?? ""}</li>
+          <li className="list-group-item">{item.score ?? ""}</li>
+          <li className="list-group-item">{item.experienceDays ?? ""}</li>
+          <li className="list-group-item">{item.useLangs ?? ""}</li>
+          <li className="list-group-item">{item.availableStartCode ?? ""}</li>
+          <li className="list-group-item">{item.availableEndCode ?? ""}</li>
         </ul>
       ))}
     </>
