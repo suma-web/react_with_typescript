@@ -1,11 +1,11 @@
-import type { SortKey } from "../../data/user";
+import type { SortKey } from '../../data/user';
+
+type Props = {
+  kind: SortKey;
+  handleSort: (key: SortKey, order: 'asc' | 'desc') => void;
+};
 
 export const SortButtons = ({ kind, handleSort }: Props) => {
-  type Props = {
-    kind: SortKey;
-    handleSort: (key: SortKey, order: 'asc' | 'desc') => void;
-  };
-
   return (
     <div className="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
       <label>{kind}</label>
@@ -16,11 +16,7 @@ export const SortButtons = ({ kind, handleSort }: Props) => {
       >
         Asc
       </button>
-      <button
-        className="btn btn-secondary"
-        type="button"
-        onClick={() => handleSort(kind, 'desc')}
-      >
+      <button className="btn btn-secondary" type="button" onClick={() => handleSort(kind, 'desc')}>
         Desc
       </button>
     </div>
