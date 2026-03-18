@@ -1,4 +1,4 @@
-import { ListEdit } from './component/ListEdit/ListEdit';
+import { UserManagement } from './component/UserManagement/UserManagement';
 import { Header } from './component/Header/Header';
 
 
@@ -7,7 +7,7 @@ function App() {
   return (
     <div>
       <Header />
-      <ListEdit />
+      <UserManagement />
     </div>
   );
 }
