@@ -87,14 +87,6 @@ export const UserList = ({ userList }: Props) => {
           <li className="list-group-item">{item.phone}</li>
           <li className="list-group-item">{item.hobbies}</li>
           <li className="list-group-item">{item.url}</li>
-          {/* <li className="list-group-item">{('studyMinutes' in item && item.studyMinutes) || ''}</li>
-          <li className="list-group-item">{('studyLangs' in item && item.studyLangs) || ''}</li>
-          <li className="list-group-item">{('taskCode' in item && item.taskCode) || ''}</li>
-          <li className="list-group-item">{('score' in item && item.score) || ''}</li>
-          <li className="list-group-item">{('experienceDays' in item && item.experienceDays) || ''}</li>
-          <li className="list-group-item">{('useLangs' in item && item.useLangs) || ''}</li>
-          <li className="list-group-item">{('availableStartCode' in item && item.availableStartCode) || ''}</li>
-          <li className="list-group-item">{('availableEndCode' in item && item.availableEndCode) || ''}</li> */}
           <li className="list-group-item">{item.studyMinutes ?? ""}</li>
           <li className="list-group-item">{item.studyLangs ?? ""}</li>
           <li className="list-group-item">{item.taskCode ?? ""}</li>
