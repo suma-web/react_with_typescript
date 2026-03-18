@@ -1,9 +1,9 @@
-export type Role = "student" | "mentor"
+export type UserRole = "student" | "mentor"
 
 export type BaseUser = {
   id: number
   name: string
-  role: Role
+  role: UserRole
   email: string
   age: number
   postCode: string
